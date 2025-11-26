@@ -1,0 +1,52 @@
+<title>Hack<title>
+
+
+<canvas id="canvas"></canvas>
+
+<script>
+// Adaptado del efecto clásico Matrix Rain
+
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+// Pantalla completa
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Número de columnas basado en el tamaño de la pantalla
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+
+// Posición vertical de cada columna
+const drops = [];
+for (let i = 0; i < columns; i++) drops[i] = 1;
+
+// Caracteres que caen
+const chars = "アイウエオカキクケコサシスセソ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+function step() {
+    // Fondo semitransparente para el efecto estela
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0F0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        const text = chars[Math.floor(Math.random() * chars.length)];
+
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        // Reinicia la gota si pasa el final o aleatoriamente
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            drops[i] = 0;
+        }
+
+        drops[i]++;
+    }
+
+    requestAnimationFrame(step);
+}
+
+step();
+</script>
